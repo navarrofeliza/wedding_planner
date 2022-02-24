@@ -74,7 +74,7 @@ namespace WeddingPlanner.Controllers
         [Route("Login")]
         public IActionResult Login(User userSubmit)
         {
-            var userDB = _context.Users.FirstOrDefault(u = u.Email == userSubmit.Email);
+            var userDB = _context.Users.FirstOrDefault(use => use.Email == userSubmit.Email);
 
             if (userDB == null)
             {
@@ -174,11 +174,11 @@ namespace WeddingPlanner.Controllers
         [Route("UnRSVP")]
         public IActionResult UnRSVP(int weddingId)
         {
-            RSVP attender = _context.RSVP
+            RSVP attender = _context.RSVPs
             .SingleOrDefault(u => u.UserId == HttpContext.Session
             .GetInt32("UserId") && u.WeddingId == weddingId);
 
-            _context.RSVP.Remove(attender);
+            _context.RSVPs.Remove(attender);
             _context.SaveChanges();
 
             return RedirectToAction("Welcome");
@@ -190,13 +190,13 @@ namespace WeddingPlanner.Controllers
             Wedding this_wedding = _context.Weddings
             .SingleOrDefault(w => w.WeddingId == weddingId);
 
-            List<RSVP> rsvps = _context.RSVP
+            List<RSVP> rsvp = _context.RSVPs
             .Where(a => a.WeddingId == weddingId)
             .ToList();
 
-            foreach (var attender in rsvps)
+            foreach (var attender in rsvp)
             {
-                _context.RSVP.Remove(attender);
+                _context.RSVPs.Remove(attender);
             }
 
             _context.Weddings.Remove(this_wedding);
