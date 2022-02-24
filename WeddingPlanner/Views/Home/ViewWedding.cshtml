@@ -1,0 +1,18 @@
+<div class="text-center">
+    <h1>@ViewBag.Wedding.ToBeNameOne & @ViewBag.Wedding.ToBeNameTwo</h1>
+    <h2>Date: @ViewBag.Wedding.Date</h2>
+    <h2>Guests:
+        <ul>
+            @foreach (var guest in ViewBag.Wedding.RSVPs)
+            {
+                <li>@guest.User.FirstName @guest.User.LastName</li>
+            }
+        </ul>
+    </h2>
+
+    <div class="side info googleapi">
+        <iframe width="520" length="520"
+            src="https://www.google.com/maps/embed/v1/search?key=AIzaSyAQcRAg7ZEMa4L9TRf0QkLlCOdKmtWUMbc&q=@ViewBag.Address"
+            frameborder="0" allowfullscreen></iframe>
+    </div>
+</div>
