@@ -7,6 +7,10 @@ namespace WeddingPlanner
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null)
+            {
+                return new ValidationResult("Value was null");
+            }
             DateTime date = (DateTime)value;
             if (date < DateTime.Now)
             {

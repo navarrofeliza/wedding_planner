@@ -35,6 +35,10 @@ namespace WeddingPlanner.Controllers
         [Route("Welcome")]
         public IActionResult Welcome()
         {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index");
+            }
             var weddings = _context.Weddings.Include(wed => wed.RSVPs).OrderByDescending(wed => wed.Date);
             ViewBag.UserId = HttpContext.Session.GetInt32("UserId");
 
@@ -43,7 +47,7 @@ namespace WeddingPlanner.Controllers
             return View("Welcome", weddings);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("Register")]
         public IActionResult Register(User user)
         {
@@ -106,10 +110,14 @@ namespace WeddingPlanner.Controllers
         [Route("NewWedding")]
         public IActionResult NewWedding()
         {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index");
+            }
             return View("NewWedding");
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("CreateWedding")]
         public IActionResult CreateWedding(Wedding newWedding)
         {
@@ -128,7 +136,7 @@ namespace WeddingPlanner.Controllers
                         Date = newWedding.Date,
                         ToBeNameOne = newWedding.ToBeNameOne,
                         ToBeNameTwo = newWedding.ToBeNameTwo,
-                        UserId = (int)HttpContext.Session.GetInt32("UserId")
+                        // UserId = (int)HttpContext.Session.GetInt32("UserId")
                     };
                     _context.Add(thisWedding);
                     _context.SaveChanges();
@@ -149,6 +157,10 @@ namespace WeddingPlanner.Controllers
         [Route("ViewWedding/{weddingId}")]
         public IActionResult ViewWedding(int weddingId)
         {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index");
+            }
             Wedding wedding = _context.Weddings.Include(r => r.RSVPs).ThenInclude(use => use.User).Where(wed => wed.WeddingId == weddingId).SingleOrDefault();
 
             ViewBag.Wedding = wedding;
@@ -159,6 +171,10 @@ namespace WeddingPlanner.Controllers
         [Route("RSVP")]
         public IActionResult RSVP(int weddingId)
         {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index");
+            }
             RSVP newRSVP = new RSVP
             {
                 UserId = (int)HttpContext.Session.GetInt32("UserId"),
@@ -174,6 +190,10 @@ namespace WeddingPlanner.Controllers
         [Route("UnRSVP")]
         public IActionResult UnRSVP(int weddingId)
         {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index");
+            }
             RSVP attender = _context.RSVPs
             .SingleOrDefault(u => u.UserId == HttpContext.Session
             .GetInt32("UserId") && u.WeddingId == weddingId);
@@ -187,6 +207,10 @@ namespace WeddingPlanner.Controllers
         [Route("Delete")]
         public IActionResult Delete(int weddingId)
         {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index");
+            }
             Wedding this_wedding = _context.Weddings
             .SingleOrDefault(w => w.WeddingId == weddingId);
 
